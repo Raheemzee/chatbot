@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abdulraheem's Chatbot</title>
+</head>
+<body style="background-image: url(O73ks.jpg) ; background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+    <h1 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Chatbot</h1>
+    <div id="chat-container" style="background-color: rgb(255, 255, 255); width: 224px; border-radius: 3px;" >
+        <div id="chat-log"></div>
+        <div id="user-input">
+            <input type="text" id="user-message" placeholder="Type your message...">
+            <button onclick="sendMessage()" style="background-color: blueviolet; color: aliceblue;">Send</button>
+        </div>
+
+    </div>
+<script>
+    function sendMessage() {
+        var userMessage = document.getElementById('user-message').value;
+        document.getElementById('chat-log').innerHTML += '<p><b>You:</b> ' + userMessage + '</p>';
+        fetch('/get_response',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'user_message=' + encodeURIComponent(userMessage),
+        })
+        .then(response => response.json())
+        .then(data => {
+            var chatbotResponse = data.chatbot_response;
+            document.getElementById('chat-log').innerHTML += '<p><b>Chatbot:</b> ' + chatbotResponse + '</p>';
+        })
+        .catch(error => console.error('Error:', error));
+
+        document.getElementById('user-message').value = '';
+
+    }
+
+</script>
+
+</body>
+
+</html>
